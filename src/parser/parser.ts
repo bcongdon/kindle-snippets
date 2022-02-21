@@ -11,7 +11,6 @@ export interface Snippet {
 function parseKindleSnippets(input: string): Snippet[] {
     let entries = kindleClippings.readKindleClipping(input);
     let parsedEntries = kindleClippings.parseKindleEntries(entries);
-    console.log(parsedEntries);
     return parsedEntries.map(e => {
         return {
             author: e.authors,

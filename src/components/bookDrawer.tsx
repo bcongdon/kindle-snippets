@@ -5,7 +5,8 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import BookIcon from "@mui/icons-material/Book";
 import ListItemText from "@mui/material/ListItemText";
-
+import Box from "@mui/material/Box";
+import Toolbar from "@mui/material/Toolbar";
 interface Title {
   title: string;
   badge?: number;
@@ -30,29 +31,32 @@ const BookDrawer = ({ titles, selected, onSelect }: BookDrawerProps) => {
         },
       }}
     >
-      <List>
-        {titles.sort().map((title, index) => (
-          <ListItemButton
-            selected={index === selected}
-            key={title.title}
-            onClick={() => onSelect(index)}
-          >
-            <ListItemIcon>
-              <Badge
-                badgeContent={title.badge}
-                color="primary"
-                anchorOrigin={{
-                  vertical: "bottom",
-                  horizontal: "right",
-                }}
-              >
-                <BookIcon />
-              </Badge>
-            </ListItemIcon>
-            <ListItemText primary={title.title} />
-          </ListItemButton>
-        ))}
-      </List>
+      <Toolbar />
+      <Box sx={{ overflow: "auto" }}>
+        <List>
+          {titles.sort().map((title, index) => (
+            <ListItemButton
+              selected={index === selected}
+              key={title.title}
+              onClick={() => onSelect(index)}
+            >
+              <ListItemIcon>
+                <Badge
+                  badgeContent={title.badge}
+                  color="primary"
+                  anchorOrigin={{
+                    vertical: "bottom",
+                    horizontal: "right",
+                  }}
+                >
+                  <BookIcon />
+                </Badge>
+              </ListItemIcon>
+              <ListItemText primary={title.title} />
+            </ListItemButton>
+          ))}
+        </List>
+      </Box>
     </Drawer>
   );
 };

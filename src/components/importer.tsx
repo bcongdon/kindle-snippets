@@ -102,8 +102,8 @@ const ImporterDialog = ({
               Upload a Kindle Snippets export file.
             </Typography>
           </Grid>
-          <Grid xs={16}>
-            <Divider sx={{ marginTop: 3 }} flexItem />
+          <Grid item xs={16}>
+            <Divider flexItem />
           </Grid>
           <Grid item container justifyContent="right">
             <FormControl sx={{ marginTop: 1 }}>
@@ -120,7 +120,7 @@ const ImporterDialog = ({
                 Clear
               </Button>
               <Typography variant="caption" sx={{ marginTop: 0.5 }}>
-                Delete existing snippets.
+                Delete all existing snippets.
               </Typography>
             </FormControl>
           </Grid>
