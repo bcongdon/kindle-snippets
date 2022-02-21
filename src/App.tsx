@@ -13,6 +13,9 @@ import AppBar from "@mui/material/AppBar";
 import Grid from "@mui/material/Grid";
 import SettingsIcon from "@mui/icons-material/Settings";
 import IconButton from "@mui/material/IconButton";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+
 interface State {
   formValue: string;
   snippets: Snippet[];
@@ -23,6 +26,22 @@ interface State {
 
 const KINDLE_SNIPPETS_KEY = "kindle_snippets_content";
 const SELECTED_BOOK_KEY = "kindle_snippets_selected_book";
+
+const ThemeContainer = (props: { children: React.ReactNode }) => {
+  const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
+
+  const theme = React.useMemo(
+    () =>
+      createTheme({
+        palette: {
+          mode: prefersDarkMode ? "dark" : "light",
+        },
+      }),
+    [prefersDarkMode]
+  );
+
+  return <ThemeProvider theme={theme}>{props.children}</ThemeProvider>;
+};
 
 class App extends React.Component<{}, State> {
   constructor(props: {}) {
@@ -181,40 +200,42 @@ class App extends React.Component<{}, State> {
     );
 
     return (
-      <Grid container height="100vh">
-        <CssBaseline />
-        <AppBar
-          position="fixed"
-          sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        >
-          <Toolbar>
-            <Typography
-              variant="h6"
-              noWrap
-              component="div"
-              sx={{ flexGrow: 1 }}
-            >
-              Kindle Snippets Viewer
-            </Typography>
-            <IconButton
-              size="large"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={() => this.setState({ importerOpen: true })}
-              color="inherit"
-            >
-              <SettingsIcon />
-            </IconButton>
-          </Toolbar>
-        </AppBar>
-        <ImporterDialog
-          handleClose={() => this.setState({ importerOpen: false })}
-          onImportSnippets={this.handleNewSnippets}
-          onClear={this.clear}
-          open={this.state.importerOpen}
-        />
-        {snippetsContent}
-      </Grid>
+      <ThemeContainer>
+        <Grid container height="100vh">
+          <CssBaseline />
+          <AppBar
+            position="fixed"
+            sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          >
+            <Toolbar>
+              <Typography
+                variant="h6"
+                noWrap
+                component="div"
+                sx={{ flexGrow: 1 }}
+              >
+                Kindle Snippets Viewer
+              </Typography>
+              <IconButton
+                size="large"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                onClick={() => this.setState({ importerOpen: true })}
+                color="inherit"
+              >
+                <SettingsIcon />
+              </IconButton>
+            </Toolbar>
+          </AppBar>
+          <ImporterDialog
+            handleClose={() => this.setState({ importerOpen: false })}
+            onImportSnippets={this.handleNewSnippets}
+            onClear={this.clear}
+            open={this.state.importerOpen}
+          />
+          {snippetsContent}
+        </Grid>
+      </ThemeContainer>
     );
   }
 }
