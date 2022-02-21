@@ -11,12 +11,14 @@ import TextField from "@mui/material/TextField";
 import QuoteCard from "./components/quoteCard";
 import BookGrid from "./components/bookGrid";
 import { Typography } from "@mui/material";
+import ImporterDialog from "./components/importer";
 
 interface State {
   formValue: string;
   snippets: Snippet[];
   selectedBook?: number;
   copySnackbarOpen: boolean;
+  importerOpen: boolean;
 }
 
 const KINDLE_SNIPPETS_KEY = "kindle_snippets";
@@ -36,11 +38,13 @@ class App extends React.Component<{}, State> {
       formValue: "",
       snippets,
       copySnackbarOpen: false,
+      importerOpen: snippets.length === 0,
     };
 
     this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleNewSnippets = this.handleNewSnippets.bind(this);
     this.renderSnippets = this.renderSnippets.bind(this);
+    this.clear = this.clear.bind(this);
     this.titles = this.titles.bind(this);
   }
 
@@ -48,15 +52,15 @@ class App extends React.Component<{}, State> {
     this.setState({ formValue: event.currentTarget.value });
   }
 
-  handleSubmit(event: React.SyntheticEvent) {
-    event.preventDefault();
-    const parsedSnippets = parseKindleSnippets(this.state.formValue);
-    this.setState({ snippets: parsedSnippets });
-    localStorage.setItem(KINDLE_SNIPPETS_KEY, JSON.stringify(parsedSnippets));
+  handleNewSnippets(snippets: Snippet[]) {
+    this.setState({ snippets });
+    localStorage.setItem(KINDLE_SNIPPETS_KEY, JSON.stringify(snippets));
   }
 
   copyToClipboard(snippet: Snippet) {
-    navigator.clipboard.writeText(snippet.content);
+    const location = snippet.page ? `${snippet.page}` : snippet.location;
+    const copyContent = `${snippet.content} (${location})`;
+    navigator.clipboard.writeText(copyContent);
     this.setState({ copySnackbarOpen: true });
   }
 
@@ -98,46 +102,19 @@ class App extends React.Component<{}, State> {
   render() {
     return (
       <div className="App">
-        <form>
-          <TextField
-            multiline
-            placeholder="Paste Snippets"
-            value={this.state.formValue}
-            onChange={this.handleChange}
-            minRows={3}
-            maxRows={3}
-          />
-          <br />
-          <Button
-            variant="contained"
-            component="span"
-            onClick={() => this.clear()}
-          >
-            Clear
-          </Button>
-          <Button
-            variant="contained"
-            component="span"
-            onClick={this.handleSubmit}
-          >
-            Submit
-          </Button>
-          <label htmlFor="contained-button-file">
-            <Input
-              accept="image/*"
-              multiple
-              type="file"
-              id="contained-button-file"
-            />
-            <Button
-              variant="outlined"
-              component="span"
-              startIcon={<UploadIcon />}
-            >
-              Upload
-            </Button>
-          </label>
-        </form>
+        <ImporterDialog
+          handleClose={() => this.setState({ importerOpen: false })}
+          onImportSnippets={this.handleNewSnippets}
+          onClear={this.clear}
+          open={this.state.importerOpen}
+        />
+        <Button
+          variant="contained"
+          component="span"
+          onClick={() => this.setState({ importerOpen: true })}
+        >
+          Edit
+        </Button>
         <div
           style={{ display: this.state.snippets.length ? undefined : "none" }}
         >
