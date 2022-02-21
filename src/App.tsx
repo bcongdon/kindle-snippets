@@ -1,18 +1,16 @@
 import React from "react";
 import logo from "./logo.svg";
 import "./App.css";
-import { parseKindleSnippets, Snippet } from "./parser/parser";
+import { Snippet } from "./parser/parser";
 import Box from "@mui/material/Box";
 import { styled } from "@mui/material/styles";
 import Button from "@mui/material/Button";
-import UploadIcon from "@mui/icons-material/Upload";
 import Snackbar from "@mui/material/Snackbar";
-import TextField from "@mui/material/TextField";
 import QuoteCard from "./components/quoteCard";
 import BookGrid from "./components/bookGrid";
-import { Typography } from "@mui/material";
 import ImporterDialog from "./components/importer";
-
+import Typography from "@mui/material/Typography";
+import BookDrawer from "./components/bookDrawer";
 interface State {
   formValue: string;
   snippets: Snippet[];
@@ -118,24 +116,15 @@ class App extends React.Component<{}, State> {
         <div
           style={{ display: this.state.snippets.length ? undefined : "none" }}
         >
-          <Typography variant="h3">Books</Typography>
-          <Box
-            sx={{
-              minWidth: 275,
-              maxWidth: 1200,
-              textAlign: "left",
-              alignItems: "center",
-              marginLeft: "auto",
-              marginRight: "auto",
-              marginTop: 10,
-            }}
-          >
-            <BookGrid
-              titles={this.titles()}
-              selectedBook={this.state.selectedBook}
-              onBookClicked={(idx) => this.setState({ selectedBook: idx })}
-            />
-          </Box>
+          <BookDrawer
+            onSelect={(selectedBook) => this.setState({ selectedBook })}
+            selected={this.state.selectedBook}
+            titles={this.titles().map((t) => {
+              return {
+                title: t,
+              };
+            })}
+          />
           <Typography variant="h3">Snippets</Typography>
           <Box
             sx={{
