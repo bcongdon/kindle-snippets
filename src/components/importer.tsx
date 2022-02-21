@@ -9,7 +9,7 @@ import UploadIcon from "@mui/icons-material/Upload";
 import { styled } from "@mui/material/styles";
 import FormControl from "@mui/material/FormControl";
 import { Typography } from "@mui/material";
-import { useState } from "react";
+import { ChangeEvent, DragEvent, useState } from "react";
 import { parseKindleSnippets, Snippet } from "../parser/parser";
 
 const Input = styled("input")({
@@ -30,6 +30,7 @@ const ImporterDialog = ({
   open,
 }: ImporterDialogProps) => {
   const [snippetsContents, setSnippetsContents] = useState("");
+  const [dragState, setDragState] = useState(false);
 
   const handleNewSnippets = (content: string) => {
     const parsedSnippets = parseKindleSnippets(content);
@@ -38,6 +39,36 @@ const ImporterDialog = ({
       setSnippetsContents("");
       handleClose();
     }
+  };
+
+  const uploadFile = (f: File) => {
+    const fileReader = new FileReader();
+    fileReader.readAsText(f, "UTF-8");
+    fileReader.onload = (e) => {
+      const contents = e.target?.result;
+      if (contents) {
+        handleNewSnippets(String(contents));
+      }
+    };
+  };
+
+  const handleFileUpload = (e: ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    const file = e.target?.files?.[0];
+    if (file) {
+      uploadFile(file);
+    }
+    return false;
+  };
+
+  const handleFileDrop = (e: DragEvent) => {
+    e.preventDefault();
+    setDragState(false);
+    const file = e.dataTransfer.files[0];
+    if (file) {
+      uploadFile(file);
+    }
+    return false;
   };
 
   return (
@@ -84,16 +115,24 @@ const ImporterDialog = ({
           >
             <label htmlFor="contained-button-file">
               <Input
-                accept="image/*"
-                multiple
+                accept="text/*"
                 type="file"
                 id="contained-button-file"
+                onChange={handleFileUpload}
               />
               <Button
-                variant="outlined"
+                variant={dragState ? "contained" : "outlined"}
                 component="span"
                 sx={{ marginLeft: "auto", marginRight: "auto" }}
                 startIcon={<UploadIcon />}
+                onDragEnter={() => setDragState(true)}
+                onDragExit={() => setDragState(false)}
+                onDragLeave={() => setDragState(false)}
+                onDragOver={(e: DragEvent) => {
+                  e.preventDefault();
+                  return false;
+                }}
+                onDrop={handleFileDrop}
               >
                 Upload
               </Button>
