@@ -1,5 +1,6 @@
 import React from "react";
 import "./App.css";
+import Footer from "./components/footer";
 import { Snippet } from "./parser/parser";
 import Button from "@mui/material/Button";
 import Snackbar from "@mui/material/Snackbar";
@@ -166,6 +167,9 @@ class App extends React.Component<{}, State> {
           }}
         >
           {this.renderSnippets()}
+        </Grid>
+        <Grid item container flexDirection="column" justifyContent="flex-end">
+          <Footer />
         </Grid>
         <Snackbar
           open={this.state.copySnackbarOpen}
