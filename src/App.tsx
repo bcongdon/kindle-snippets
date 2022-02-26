@@ -9,20 +9,21 @@ import ImporterDialog from "./components/importer";
 import Typography from "@mui/material/Typography";
 import BookDrawer from "./components/bookDrawer";
 import CssBaseline from "@mui/material/CssBaseline";
-import Toolbar from "@mui/material/Toolbar";
 import AppBar from "@mui/material/AppBar";
 import Grid from "@mui/material/Grid";
 import SettingsIcon from "@mui/icons-material/Settings";
-import IconButton from "@mui/material/IconButton";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import ToolbarHeader from "./components/toolbarHeader";
+import { styled, useTheme } from "@mui/material/styles";
+import { useDrawerToggleable, DRAWER_WIDTH } from "./utils/theming";
 
 interface State {
-  formValue: string;
   snippets: Snippet[];
   selectedBook?: number;
   copySnackbarOpen: boolean;
   importerOpen: boolean;
+  drawerOpen: boolean;
 }
 
 const KINDLE_SNIPPETS_KEY = "kindle_snippets_content";
@@ -44,6 +45,33 @@ const ThemeContainer = (props: { children: React.ReactNode }) => {
   return <ThemeProvider theme={theme}>{props.children}</ThemeProvider>;
 };
 
+const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
+  ({ open }: { open: boolean }) => {
+    const theme = useTheme();
+    const drawerToggleable = useDrawerToggleable();
+
+    return {
+      flexGrow: 1,
+      padding: theme.spacing(3),
+      ...(!drawerToggleable || open
+        ? {
+            transition: theme.transitions.create("margin", {
+              easing: theme.transitions.easing.easeOut,
+              duration: theme.transitions.duration.enteringScreen,
+            }),
+            marginLeft: DRAWER_WIDTH,
+          }
+        : {
+            transition: theme.transitions.create("margin", {
+              easing: theme.transitions.easing.sharp,
+              duration: theme.transitions.duration.leavingScreen,
+            }),
+            marginLeft: 0,
+          }),
+    };
+  }
+);
+
 class App extends React.Component<{}, State> {
   constructor(props: {}) {
     super(props);
@@ -55,11 +83,11 @@ class App extends React.Component<{}, State> {
       (snippets.length ? 0 : undefined);
 
     this.state = {
-      formValue: "",
       snippets,
       selectedBook,
       copySnackbarOpen: false,
       importerOpen: snippets.length === 0,
+      drawerOpen: false,
     };
 
     this.handleNewSnippets = this.handleNewSnippets.bind(this);
@@ -138,7 +166,7 @@ class App extends React.Component<{}, State> {
   }
 
   onSelectBook(selectedBook: number) {
-    this.setState({ selectedBook });
+    this.setState({ selectedBook, drawerOpen: false });
     localStorage.setItem(SELECTED_BOOK_KEY, selectedBook.toString());
   }
 
@@ -148,29 +176,27 @@ class App extends React.Component<{}, State> {
         <BookDrawer
           onSelect={this.onSelectBook}
           selected={this.state.selectedBook}
+          open={this.state.drawerOpen}
           titles={Array.from(this.snippetTitleCount()).map(
             ([title, count]) => ({ title, badge: count })
           )}
         />
         <Typography variant="h3">Snippets</Typography>
-        <Grid
-          item
-          container
-          sx={{
-            minWidth: 275,
-            maxWidth: 700,
-            textAlign: "left",
-            marginLeft: "500px",
-            flexDirection: "column",
-            marginTop: 10,
-            marginBottom: 5,
-          }}
-        >
-          {this.renderSnippets()}
-        </Grid>
-        <Grid item container flexDirection="column" justifyContent="flex-end">
-          <Footer />
-        </Grid>
+        <Main open={this.state.drawerOpen}>
+          <Grid
+            item
+            container
+            sx={{
+              minWidth: 275,
+              maxWidth: 700,
+              textAlign: "left",
+              flexDirection: "column",
+            }}
+          >
+            {this.renderSnippets()}
+          </Grid>
+          {/* <Footer /> */}
+        </Main>
         <Snackbar
           open={this.state.copySnackbarOpen}
           autoHideDuration={3000}
@@ -205,40 +231,25 @@ class App extends React.Component<{}, State> {
 
     return (
       <ThemeContainer>
-        <Grid container height="100vh">
-          <CssBaseline />
-          <AppBar
-            position="fixed"
-            sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
-          >
-            <Toolbar>
-              <Typography
-                variant="h6"
-                noWrap
-                component="div"
-                sx={{ flexGrow: 1 }}
-              >
-                Kindle Snippets Viewer
-              </Typography>
-              <IconButton
-                size="large"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
-                onClick={() => this.setState({ importerOpen: true })}
-                color="inherit"
-              >
-                <SettingsIcon />
-              </IconButton>
-            </Toolbar>
-          </AppBar>
-          <ImporterDialog
-            handleClose={() => this.setState({ importerOpen: false })}
-            onImportSnippets={this.handleNewSnippets}
-            onClear={this.clear}
-            open={this.state.importerOpen}
+        <CssBaseline />
+        <AppBar
+          position="fixed"
+          sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        >
+          <ToolbarHeader
+            onSettingsClick={() => this.setState({ importerOpen: true })}
+            onDrawerToggle={() =>
+              this.setState({ drawerOpen: !this.state.drawerOpen })
+            }
           />
-          {snippetsContent}
-        </Grid>
+        </AppBar>
+        <ImporterDialog
+          handleClose={() => this.setState({ importerOpen: false })}
+          onImportSnippets={this.handleNewSnippets}
+          onClear={this.clear}
+          open={this.state.importerOpen}
+        />
+        {snippetsContent}
       </ThemeContainer>
     );
   }

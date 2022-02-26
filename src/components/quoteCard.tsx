@@ -13,7 +13,10 @@ type QuoteCardProps = {
 };
 
 const QuoteCard = ({ snippet, onClickCopy }: QuoteCardProps) => (
-  <Card sx={{ minWidth: 275, marginTop: 2.5 }} variant="outlined">
+  <Card
+    sx={{ minWidth: 275, marginTop: 2.5, overflowWrap: "anywhere" }}
+    variant="outlined"
+  >
     <CardHeader
       disableTypography
       title={
