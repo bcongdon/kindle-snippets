@@ -181,8 +181,7 @@ class App extends React.Component<{}, State> {
             ([title, count]) => ({ title, badge: count })
           )}
         />
-        <Typography variant="h3">Snippets</Typography>
-        <Main open={this.state.drawerOpen}>
+        <Main sx={{ marginTop: 5 }} open={this.state.drawerOpen}>
           <Grid item container>
             <Grid item sm={0} md={1} xl={2} />
             <Grid
@@ -221,6 +220,7 @@ class App extends React.Component<{}, State> {
         alignItems="center"
         justifyContent="center"
         flexDirection="column"
+        sx={{ height: "100%" }}
       >
         <Typography noWrap component="div" sx={{ marginBottom: 1 }}>
           No snippets found. Want to import some?
