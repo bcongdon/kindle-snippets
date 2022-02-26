@@ -3,8 +3,6 @@ import Toolbar from "@mui/material/Toolbar";
 import SettingsIcon from "@mui/icons-material/Settings";
 import MenuIcon from "@mui/icons-material/Menu";
 import Typography from "@mui/material/Typography";
-import useMediaQuery from "@mui/material/useMediaQuery";
-import { useTheme } from "@mui/material/styles";
 import { useDrawerToggleable } from "../utils/theming";
 
 interface Props {

@@ -1,6 +1,5 @@
 import React from "react";
 import "./App.css";
-import Footer from "./components/footer";
 import { Snippet } from "./parser/parser";
 import Button from "@mui/material/Button";
 import Snackbar from "@mui/material/Snackbar";

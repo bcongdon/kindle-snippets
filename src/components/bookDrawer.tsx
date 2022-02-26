@@ -7,8 +7,6 @@ import BookIcon from "@mui/icons-material/Book";
 import ListItemText from "@mui/material/ListItemText";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
-import useMediaQuery from "@mui/material/useMediaQuery";
-import { useTheme } from "@mui/material/styles";
 import { useDrawerToggleable, DRAWER_WIDTH } from "../utils/theming";
 
 interface Title {
