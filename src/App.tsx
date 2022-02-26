@@ -183,17 +183,24 @@ class App extends React.Component<{}, State> {
         />
         <Typography variant="h3">Snippets</Typography>
         <Main open={this.state.drawerOpen}>
-          <Grid
-            item
-            container
-            sx={{
-              minWidth: 275,
-              textAlign: "left",
-              flexDirection: "column",
-              alignContent: "space-around",
-            }}
-          >
-            {this.renderSnippets()}
+          <Grid item container>
+            <Grid item sm={0} md={1} xl={2} />
+            <Grid
+              sm={16}
+              md={10}
+              xl={8}
+              item
+              container
+              sx={{
+                minWidth: 275,
+                textAlign: "left",
+                flexDirection: "column",
+                flexWrap: "nowrap",
+                alignContent: "space-around",
+              }}
+            >
+              {this.renderSnippets()}
+            </Grid>
           </Grid>
           {/* <Footer /> */}
         </Main>
