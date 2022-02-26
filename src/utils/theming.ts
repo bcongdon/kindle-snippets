@@ -3,7 +3,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 
 const useDrawerToggleable = () => {
   const theme = useTheme();
-  const drawerToggleable = !useMediaQuery(theme.breakpoints.up("md"));
+  const drawerToggleable = useMediaQuery(theme.breakpoints.down("md"));
   return drawerToggleable;
 };
 
