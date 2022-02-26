@@ -188,9 +188,9 @@ class App extends React.Component<{}, State> {
             container
             sx={{
               minWidth: 275,
-              maxWidth: 700,
               textAlign: "left",
               flexDirection: "column",
+              alignContent: "space-around",
             }}
           >
             {this.renderSnippets()}

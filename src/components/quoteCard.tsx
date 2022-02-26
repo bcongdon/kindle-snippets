@@ -14,7 +14,12 @@ type QuoteCardProps = {
 
 const QuoteCard = ({ snippet, onClickCopy }: QuoteCardProps) => (
   <Card
-    sx={{ minWidth: 275, marginTop: 2.5, overflowWrap: "anywhere" }}
+    sx={{
+      minWidth: 275,
+      maxWidth: 900,
+      marginTop: 2.5,
+      overflowWrap: "anywhere",
+    }}
     variant="outlined"
   >
     <CardHeader
