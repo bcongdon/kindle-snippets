@@ -73,7 +73,7 @@ const ImporterDialog = ({
 
   return (
     <Dialog open={open} onClose={handleClose}>
-      <DialogTitle id="alert-dialog-title">Import Kindle Snippets</DialogTitle>
+      <DialogTitle id="alert-dialog-title">Import Kindle Clippings</DialogTitle>
       <DialogContent>
         <Grid
           sx={{ marginTop: 0.25 }}
@@ -85,7 +85,7 @@ const ImporterDialog = ({
           <Grid item xs={8} container direction="column" alignItems="center">
             <TextField
               multiline
-              placeholder="Paste Snippets"
+              placeholder="Paste Clippings"
               minRows={3}
               maxRows={3}
               fullWidth
@@ -138,11 +138,20 @@ const ImporterDialog = ({
               </Button>
             </label>
             <Typography variant="caption" sx={{ marginTop: 0.5 }}>
-              Upload a Kindle Snippets export file.
+              Upload a Kindle Clippings export file.
             </Typography>
           </Grid>
-          <Grid item xs={16}>
-            <Divider flexItem />
+          <Grid item xs={16} sx={{ textAlign: "center" }}>
+            <Typography variant="caption">
+              You can use a tool like{" "}
+              <a target="_blank" href="https://calibre-ebook.com/">
+                Calibre
+              </a>{" "}
+              to export your clippings from your Kindle device.
+              <br />
+              Clippings are usually stored in a file called "My Clippings.txt".
+            </Typography>
+            <Divider sx={{ marginTop: 0.5 }} flexItem />
           </Grid>
           <Grid item container justifyContent="right">
             <FormControl sx={{ marginTop: 1 }}>
@@ -158,7 +167,7 @@ const ImporterDialog = ({
               >
                 Clear
               </Button>
-              <Typography variant="caption" sx={{ marginTop: 0.5 }}>
+              <Typography variant="caption" sx={{ marginTop: 1 }}>
                 Delete all existing snippets.
               </Typography>
             </FormControl>
