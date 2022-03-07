@@ -1,8 +1,12 @@
 # kindle-snippets
+
 A small in-browser Kindle Snippets viewer
 
----
+**Screenshot:**
 
+![](screenshot.png)
+
+---
 
 # Getting Started with Create React App
 
