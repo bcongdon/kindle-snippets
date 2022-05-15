@@ -4,7 +4,7 @@ export interface Snippet {
     author: string,
     title: string,
     content: string,
-    page: number,
+    page: number | string | null,
     location: string,
 }
 

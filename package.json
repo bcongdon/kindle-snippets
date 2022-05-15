@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@darylserrano/kindle-clippings": "^2.2.5",
+    "@darylserrano/kindle-clippings": "github:bcongdon/KindleClippings#fix/non-number-pages",
     "@emotion/react": "^11.8.1",
     "@emotion/styled": "^11.8.1",
     "@mui/icons-material": "^5.4.2",
@@ -26,7 +26,8 @@
     "build": "react-scripts build",
     "lint": "eslint src",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "postinstall": "cd node_modules/@darylserrano/kindle-clippings && npm run build"
   },
   "eslintConfig": {
     "extends": [

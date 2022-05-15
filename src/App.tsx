@@ -35,8 +35,8 @@ const ThemeContainer = (props: { children: React.ReactNode }) => {
     () =>
       createTheme({
         palette: {
-          mode: prefersDarkMode ? "dark" : "light",
-        },
+          mode: prefersDarkMode ? "dark" : "light"
+        }
       }),
     [prefersDarkMode]
   );
@@ -56,17 +56,17 @@ const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
         ? {
             transition: theme.transitions.create("margin", {
               easing: theme.transitions.easing.easeOut,
-              duration: theme.transitions.duration.enteringScreen,
+              duration: theme.transitions.duration.enteringScreen
             }),
-            marginLeft: DRAWER_WIDTH,
+            marginLeft: DRAWER_WIDTH
           }
         : {
             transition: theme.transitions.create("margin", {
               easing: theme.transitions.easing.sharp,
-              duration: theme.transitions.duration.leavingScreen,
+              duration: theme.transitions.duration.leavingScreen
             }),
-            marginLeft: 0,
-          }),
+            marginLeft: 0
+          })
     };
   }
 );
@@ -86,7 +86,7 @@ class App extends React.Component<{}, State> {
       selectedBook,
       copySnackbarOpen: false,
       importerOpen: snippets.length === 0,
-      drawerOpen: false,
+      drawerOpen: false
     };
 
     this.handleNewSnippets = this.handleNewSnippets.bind(this);
@@ -133,7 +133,7 @@ class App extends React.Component<{}, State> {
   clear() {
     this.setState({
       selectedBook: undefined,
-      snippets: [],
+      snippets: []
     });
     [KINDLE_SNIPPETS_KEY, SELECTED_BOOK_KEY].forEach((k) =>
       localStorage.removeItem(k)
@@ -152,7 +152,13 @@ class App extends React.Component<{}, State> {
         if (a.title !== b.title) {
           return a.title.localeCompare(b.title);
         }
-        return a.page - b.page;
+        if (typeof a.page === "number" && typeof b.page === "number") {
+          return a.page - b.page;
+        } else {
+          return (a.page || "")
+            .toString()
+            .localeCompare((b.page || "").toString());
+        }
       })
       .map((snippet, idx) => (
         <Grid item key={idx}>
@@ -194,7 +200,7 @@ class App extends React.Component<{}, State> {
                 textAlign: "left",
                 flexDirection: "column",
                 flexWrap: "nowrap",
-                alignContent: "space-around",
+                alignContent: "space-around"
               }}
             >
               {this.renderSnippets()}
